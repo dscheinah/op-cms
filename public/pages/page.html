@@ -1,0 +1,62 @@
+<template>
+    <form id="page">
+        <h1>Seite</h1>
+        <details>
+            <summary>Wähle aus, an welcher Stelle der Seite welcher Inhalt ausgegeben werden soll.</summary>
+            <p>
+                Je nach Inhalt stehen hier verschiedene Auswahlmöglichkeiten zur Verfügung.
+                Ebenso ist es möglich, direkt zum Bearbeiten zu wechseln.
+            </p>
+            <p>
+                Die Überschriften und die Anordnung der Elemente werden vom Programmierer vorgegeben.
+            </p>
+        </details>
+        <div data-sections></div>
+        <div class="sx-actions">
+            <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
+        </div>
+    </form>
+</template>
+
+<script type="module">
+    import {helper, page, state, plugins} from '../js/app.js';
+
+    let data = state.get('page-load') || null;
+
+    page.register('page', ({render, show, action, listen}) => {
+        const pluginState = {helper, page, state, action, listen};
+
+        render(() => {
+            if (!data) {
+                return;
+            }
+            if (data.title) {
+                helper.set('#page h1', 'innerHTML', data.title);
+            }
+            if (!data['sections']) {
+                return;
+            }
+            helper.list('#page [data-sections]', data['sections'], (section) => {
+                const div = helper.create('div');
+                div.innerHTML = `<h2>${section.heading}</h2>`;
+                section['contents'].forEach((content) => {
+                    div.appendChild(plugins[content.type].render(pluginState, content));
+                });
+                return div;
+            });
+        });
+
+        show(() => {
+            Object.values(plugins).forEach((plugin) => plugin.show(pluginState));
+        });
+
+        action('#page', 'submit', (event) => {
+            event.preventDefault();
+            state.dispatch('page-save', new FormData(event.target));
+        });
+        Object.values(plugins).forEach((plugin) => plugin.action(pluginState));
+
+        listen('page-load', (page) => data = page || null);
+        Object.values(plugins).forEach((plugin) => plugin.listen(pluginState));
+    });
+</script>

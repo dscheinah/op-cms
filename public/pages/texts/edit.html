@@ -1,0 +1,58 @@
+<template>
+    <form id="texts-edit">
+        <h1>Text <span data-type></span></h1>
+        <details>
+            <summary>Hier kannst du einen Text bearbeiten.</summary>
+            <p>
+                Alle Änderungen werden direkt beim Speichern sichtbar. Ebenso sind gelöschte Texte sofort weg.
+                Der Name dient nur dazu, den Text bei der Pflege wiederzufinden.
+            </p>
+        </details>
+        <input type="text" id="texts-edit-name" name="name" required/>
+        <label for="texts-edit-name">Name</label>
+        <textarea id="texts-edit-content" name="content" required></textarea>
+        <label for="texts-edit-content">Inhalt</label>
+        <div class="sx-actions">
+            <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
+            <button type="button" data-remove hidden><span class="sx-button-icon">🗑</span> löschen</button>
+        </div>
+    </form>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../../js/app.js';
+
+    let data = state.get('text-load') || {}, edit = state.get('text-edit');
+
+    page.register('texts-edit', ({render, action, listen}) => {
+        render(() => {
+            helper.set('#texts-edit [data-type]', 'innerHTML', edit ? 'bearbeiten' : 'hinzufügen');
+            helper.set('#texts-edit-name', 'value', edit ? data.name : '');
+            helper.set('#texts-edit-content', 'value', edit ? data.content : '');
+            helper.set('#texts-edit [data-remove]', 'hidden', !edit);
+        });
+
+        action('#texts-edit', 'submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            if (edit) {
+                formData.append('id', data.id);
+            }
+            state.dispatch('text-save', formData);
+        });
+        action('#texts-edit [data-remove]', 'click', () => {
+            if (confirm('Soll der Text wirklich gelöscht werden?')) {
+                state.dispatch('text-remove', data.id);
+            }
+        });
+
+        listen('text-load', (text) => data = text || {});
+        listen('text-edit', (trigger) => edit = trigger);
+        listen('text-save', () => {
+            history.back();
+        });
+        listen('text-remove', () => {
+            history.back();
+        });
+    });
+</script>

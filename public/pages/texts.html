@@ -1,0 +1,60 @@
+<template>
+    <div id="texts">
+        <h1>Texte</h1>
+        <details>
+            <summary>Bearbeite bestehende Texte, lösche veraltete oder füge neue hinzu.</summary>
+            <p>
+                Wenn du bestehende Texte bearbeitest, werden die Änderungen sofort sichtbar.
+                Möchtest du neue Änderungen vorbereiten und gesammelt anwenden, lege neue Texte an.
+                Veraltete Texte kannst du anschließend löschen.
+            </p>
+        </details>
+        <table class="sx-list">
+            <colgroup>
+                <col/>
+                <col class="sx-action"/>
+            </colgroup>
+            <tbody></tbody>
+        </table>
+        <div class="sx-actions">
+            <button type="button" data-add>
+                <span class="sx-button-icon">＋</span> hinzufügen
+            </button>
+        </div>
+    </div>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../js/app.js';
+
+    let data = state.get('text-list') || [];
+
+    page.register('texts', ({render, show, action, listen}) => {
+        render(() => {
+            helper.list('#texts tbody', data, (item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td><button type="button" value="${item.id}" data-edit><span class="sx-button-icon">▽</span> mehr</button></td>
+                `;
+                return row;
+            });
+        });
+
+        show(() => {
+            state.dispatch('text-list', null);
+        });
+
+        action('#texts [data-add]', 'click', () => {
+            state.dispatch('text-edit', false);
+            page.show('texts-edit');
+        });
+        action('#texts [data-edit]', 'click', (event, target) => {
+            state.dispatch('text-edit', true);
+            state.dispatch('text-load', parseInt(target.value));
+            page.show('texts-edit');
+        });
+
+        listen('text-list', (texts) => data = texts);
+    });
+</script>

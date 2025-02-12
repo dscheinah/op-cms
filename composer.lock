@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e569ae8a52b0d1542d30dd28e2751c3",
+    "content-hash": "bca69d2504d40d8c5501202933a9274a",
     "packages": [
         {
             "name": "dscheinah/sx-application",
@@ -148,6 +148,45 @@
                 "source": "https://github.com/dscheinah/sx-css/tree/v1.0.5"
             },
             "time": "2021-04-01T10:18:36+00:00"
+        },
+        {
+            "name": "dscheinah/sx-data",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dscheinah/sx-data.git",
+                "reference": "b241bb041bf896640e196d3e5208246f582dc9ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dscheinah/sx-data/zipball/b241bb041bf896640e196d3e5208246f582dc9ff",
+                "reference": "b241bb041bf896640e196d3e5208246f582dc9ff",
+                "shasum": ""
+            },
+            "require": {
+                "dscheinah/sx-container": "^1.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sx\\Data\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Database abstraction with corresponding implementation patterns.",
+            "support": {
+                "issues": "https://github.com/dscheinah/sx-data/issues",
+                "source": "https://github.com/dscheinah/sx-data/tree/v1.2.0"
+            },
+            "time": "2025-01-20T19:57:31+00:00"
         },
         {
             "name": "dscheinah/sx-js",
@@ -294,6 +333,45 @@
                 "source": "https://github.com/dscheinah/sx-server/tree/1.1.0"
             },
             "time": "2023-04-27T20:21:10+00:00"
+        },
+        {
+            "name": "dscheinah/sx-template",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dscheinah/sx-template.git",
+                "reference": "b6c1f04ed89c9004bcc5f38085ffd64c54d7b1f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dscheinah/sx-template/zipball/b6c1f04ed89c9004bcc5f38085ffd64c54d7b1f7",
+                "reference": "b6c1f04ed89c9004bcc5f38085ffd64c54d7b1f7",
+                "shasum": ""
+            },
+            "require": {
+                "dscheinah/sx-container": "^1.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sx\\Template\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Basics for a templating syntax usable for output and content management.",
+            "support": {
+                "issues": "https://github.com/dscheinah/sx-template/issues",
+                "source": "https://github.com/dscheinah/sx-template/tree/v1.0.0"
+            },
+            "time": "2025-02-09T21:40:58+00:00"
         },
         {
             "name": "mnsami/composer-custom-directory-installer",
@@ -3245,7 +3323,7 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

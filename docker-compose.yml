@@ -11,3 +11,36 @@ services:
       - APP_ENV
       - XDEBUG_MODE
       - XDEBUG_CONFIG
+      - MYSQL_SERVER=db
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+  db:
+    image: mysql
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+      - MYSQL_ONETIME_PASSWORD=1
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+  example:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    ports:
+      - "${PORT_EXAMPLE:-8080}:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/example/public
+      - XDEBUG_MODE
+      - XDEBUG_CONFIG
+      - MYSQL_SERVER=db
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+volumes:
+  db:

@@ -1,5 +1,5 @@
 {
-    "name": "dscheinah/sx-skeleton",
+    "name": "dscheinah/op-cms",
     "description": "This is a common setup for a simple sx application.",
     "type": "project",
     "license": "GPL-3.0-or-later",
@@ -8,7 +8,9 @@
         "dscheinah/sx-css": "^1.0",
         "dscheinah/sx-js": "^1.0",
         "mnsami/composer-custom-directory-installer": "^2.0",
-        "dscheinah/sx-config": "^1.0"
+        "dscheinah/sx-config": "^1.0",
+        "dscheinah/sx-data": "^1.2",
+        "dscheinah/sx-template": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3",

@@ -4,8 +4,11 @@ import State from '../vendor/dscheinah/sx-js/src/State.js';
 import init from './app/init.js';
 import navigate from './app/navigate.js';
 import * as data from './repository/data.js';
+import * as PageRepository from './repository/page.js';
+import * as TextRepository from './repository/text.js';
 // By separating the helpers to its own namespace they do not need to packed to an object here.
 import * as helper from './helper.js';
+import * as plugins from './plugins.js';
 
 // Only allow one app to be run. This may happen, if browser cache loads an outdated page for some reason.
 if (window.sxAppInitialized) {
@@ -46,6 +49,37 @@ state.listen('sx-show', () => state.dispatch('loading', false));
 // This is a simple example for async global state management.
 state.handle('backend-data', (payload) => data.load(payload));
 
+[
+    'page-load',
+    'page-save',
+    'text-list',
+    'text-load',
+    'text-save',
+    'text-remove',
+].forEach((key) => {
+    state.handle(key, async (payload, next) => {
+        try {
+            state.dispatch('loading', true);
+            return await next(payload);
+        } finally {
+            state.dispatch('loading', false);
+        }
+    });
+});
+state.handle('page-load', PageRepository.load);
+state.handle('page-save', PageRepository.save);
+state.handle('text-list', TextRepository.list);
+state.handle('text-load', TextRepository.load);
+state.handle('text-save', TextRepository.save);
+state.handle('text-remove', TextRepository.remove);
+
+state.listen('page-load', (page) => {
+    if (page.title) {
+        helper.set('title', 'innerHTML', page.title);
+    }
+});
+state.dispatch('page-load', null);
+
 // Define all pages and load the main page. The ID defined here is globally used for:
 //  - handling navigation by href or value (see above)
 //  - registering scopes in pages
@@ -53,9 +87,14 @@ state.handle('backend-data', (payload) => data.load(payload));
 // For real routing you can replace window.location.href with custom paths for each page.
 page.add('home', 'pages/home.html', window.location.href);
 page.add('backend', 'pages/backend.html', window.location.href);
+
+page.add('page', 'pages/page.html', window.location.href);
+page.add('texts', 'pages/texts.html', window.location.href);
+page.add('texts-edit', 'pages/texts/edit.html', window.location.href);
+
 // If used with routing this must be replaced with a check on the called route.
-page.show('home');
+page.show('page');
 
 // The app.js file is used as a kind of service manager for dependency injection.
 // Import the file in pages to get access to the exported modules.
-export {helper, page, state};
+export {helper, page, state, plugins};
