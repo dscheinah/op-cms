@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Handler\ListHandler;
 use App\Handler\PageLoadHandler;
 use App\Handler\PageSaveHandler;
 use App\Handler\TextListHandler;
@@ -33,8 +32,6 @@ class RouterFactory implements FactoryInterface
         // The prefix can be set in the config if the index.php is not available from "/".
         $prefix = $options['prefix'] ?? '';
         $router = new Router($injector->get(MiddlewareHandlerInterface::class));
-        // Add the example handler for the backend page.
-        $router->post($prefix . 'list', ListHandler::class);
 
         $router->get($prefix . 'page/load', PageLoadHandler::class);
         $router->post($prefix . 'page/save', PageSaveHandler::class);

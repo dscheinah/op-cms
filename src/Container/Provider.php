@@ -3,8 +3,6 @@
 namespace App\Container;
 
 use App\ApplicationFactory;
-use App\Handler\ListHandler;
-use App\Handler\ListHandlerFactory;
 use App\Handler\PageLoadHandler;
 use App\Handler\PageLoadHandlerFactory;
 use App\Handler\PageSaveHandler;
@@ -61,7 +59,6 @@ class Provider implements ProviderInterface
         // Add all local classes and factories.
         $injector->set(ApplicationInterface::class, ApplicationFactory::class);
         $injector->set(RouterInterface::class, RouterFactory::class);
-        $injector->set(ListHandler::class, ListHandlerFactory::class);
 
         $injector->set(BackendInterface::class, MySqlBackendFactory::class);
 

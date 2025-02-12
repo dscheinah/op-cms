@@ -1,9 +1,7 @@
 import Action from '../vendor/dscheinah/sx-js/src/Action.js';
 import Page from '../vendor/dscheinah/sx-js/src/Page.js';
 import State from '../vendor/dscheinah/sx-js/src/State.js';
-import init from './app/init.js';
 import navigate from './app/navigate.js';
-import * as data from './repository/data.js';
 import * as PageRepository from './repository/page.js';
 import * as TextRepository from './repository/text.js';
 // By separating the helpers to its own namespace they do not need to packed to an object here.
@@ -26,9 +24,6 @@ const state = new State();
 // The state event gets the ID of the page as payload.
 const page = new Page(state, helper.element('#main'));
 
-// Populate the initial application state.
-init(state);
-
 // Handle the global navigation. This also handles links in pages automatically.
 // To add a link use <button value="${id}" data-navigation>...</button>.
 // The IDs must correspond with the pages defined later in this file.
@@ -45,9 +40,6 @@ state.handle('loading', (payload, next) => {
 });
 // Always disable the loading animation when any loaded page is ready.
 state.listen('sx-show', () => state.dispatch('loading', false));
-
-// This is a simple example for async global state management.
-state.handle('backend-data', (payload) => data.load(payload));
 
 [
     'page-load',
@@ -85,9 +77,6 @@ state.dispatch('page-load', null);
 //  - registering scopes in pages
 //  - payload of sx-show and sx-hide state events
 // For real routing you can replace window.location.href with custom paths for each page.
-page.add('home', 'pages/home.html', window.location.href);
-page.add('backend', 'pages/backend.html', window.location.href);
-
 page.add('page', 'pages/page.html', window.location.href);
 page.add('texts', 'pages/texts.html', window.location.href);
 page.add('texts-edit', 'pages/texts/edit.html', window.location.href);
