@@ -13,7 +13,7 @@
         </details>
         <div data-sections></div>
         <div class="sx-actions">
-            <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
+            <button type="submit" disabled><span class="sx-button-icon">🖫</span> speichern</button>
         </div>
     </form>
 </template>
@@ -23,11 +23,13 @@
 
     let data = state.get('page-load') || null;
     let values = state.get('page-state') || {};
+    let changed = state.get('page-changed') || false;
 
     page.register('page', ({render, show, action, listen}) => {
         const pluginState = {helper, page, state, action, listen};
 
         render(() => {
+            helper.set('#page button[type="submit"]', 'disabled', !changed);
             if (!data) {
                 return;
             }
@@ -42,7 +44,7 @@
                 const div = helper.create('div');
                 div.innerHTML = `<h2>${section.heading}</h2>`;
                 section['contents'].forEach((content) => {
-                    div.appendChild(plugins[content.type].render(pluginState, content, values, index++));
+                    div.appendChild(plugins[content.type].render(pluginState, content, values || {}, index++));
                 });
                 return div;
             });
@@ -55,14 +57,17 @@
         action('#page', 'submit', (event, target) => {
             event.preventDefault();
             state.dispatch('page-save', new FormData(target));
+            state.dispatch('page-changed', false);
         });
         action('#page', 'change', (event, target) => {
             state.dispatch('page-state', Object.fromEntries((new FormData(target)).entries()));
+            state.dispatch('page-changed', true);
         });
         Object.values(plugins).forEach((plugin) => plugin.action(pluginState));
 
         listen('page-load', (page) => data = page || null);
-        listen('page-state', (state) => values = state);
+        listen('page-state', (state) => values = state || {});
+        listen('page-changed', (state) => changed = state || false);
         Object.values(plugins).forEach((plugin) => plugin.listen(pluginState));
     });
 </script>
