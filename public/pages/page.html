@@ -22,6 +22,7 @@
     import {helper, page, state, plugins} from '../js/app.js';
 
     let data = state.get('page-load') || null;
+    let values = state.get('page-state') || {};
 
     page.register('page', ({render, show, action, listen}) => {
         const pluginState = {helper, page, state, action, listen};
@@ -36,11 +37,12 @@
             if (!data['sections']) {
                 return;
             }
+            let index = 0;
             helper.list('#page [data-sections]', data['sections'], (section) => {
                 const div = helper.create('div');
                 div.innerHTML = `<h2>${section.heading}</h2>`;
                 section['contents'].forEach((content) => {
-                    div.appendChild(plugins[content.type].render(pluginState, content));
+                    div.appendChild(plugins[content.type].render(pluginState, content, values, index++));
                 });
                 return div;
             });
@@ -50,13 +52,17 @@
             Object.values(plugins).forEach((plugin) => plugin.show(pluginState));
         });
 
-        action('#page', 'submit', (event) => {
+        action('#page', 'submit', (event, target) => {
             event.preventDefault();
-            state.dispatch('page-save', new FormData(event.target));
+            state.dispatch('page-save', new FormData(target));
+        });
+        action('#page', 'change', (event, target) => {
+            state.dispatch('page-state', Object.fromEntries((new FormData(target)).entries()));
         });
         Object.values(plugins).forEach((plugin) => plugin.action(pluginState));
 
         listen('page-load', (page) => data = page || null);
+        listen('page-state', (state) => values = state);
         Object.values(plugins).forEach((plugin) => plugin.listen(pluginState));
     });
 </script>

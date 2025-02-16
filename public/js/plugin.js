@@ -1,5 +1,5 @@
 export default class Plugin {
-    render(pluginState, content) {
+    render(pluginState, content, values, index) {
     }
 
     show(pluginState) {
