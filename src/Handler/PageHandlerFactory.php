@@ -7,11 +7,11 @@ use Sx\Container\FactoryInterface;
 use Sx\Container\Injector;
 use Sx\Message\Response\ResponseHelperInterface;
 
-class PageLoadHandlerFactory implements FactoryInterface
+class PageHandlerFactory implements FactoryInterface
 {
-    public function create(Injector $injector, array $options, string $class): PageLoadHandler
+    public function create(Injector $injector, array $options, string $class): object
     {
-        return new PageLoadHandler(
+        return new $class(
             $injector->get(ResponseHelperInterface::class),
             $injector->get(PageRepository::class),
         );

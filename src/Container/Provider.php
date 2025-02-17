@@ -4,9 +4,8 @@ namespace App\Container;
 
 use App\ApplicationFactory;
 use App\Handler\PageLoadHandler;
-use App\Handler\PageLoadHandlerFactory;
 use App\Handler\PageSaveHandler;
-use App\Handler\PageSaveHandlerFactory;
+use App\Handler\PageHandlerFactory;
 use App\Handler\TextHandlerFactory;
 use App\Handler\TextListHandler;
 use App\Handler\TextLoadHandler;
@@ -62,8 +61,8 @@ class Provider implements ProviderInterface
 
         $injector->set(BackendInterface::class, MySqlBackendFactory::class);
 
-        $injector->set(PageLoadHandler::class, PageLoadHandlerFactory::class);
-        $injector->set(PageSaveHandler::class, PageSaveHandlerFactory::class);
+        $injector->set(PageLoadHandler::class, PageHandlerFactory::class);
+        $injector->set(PageSaveHandler::class, PageHandlerFactory::class);
         $injector->set(TextListHandler::class, TextHandlerFactory::class);
         $injector->set(TextLoadHandler::class, TextHandlerFactory::class);
         $injector->set(TextRemoveHandler::class, TextHandlerFactory::class);
