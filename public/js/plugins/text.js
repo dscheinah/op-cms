@@ -17,7 +17,7 @@ class Text extends Plugin {
         element.innerHTML = `
             <div class="sx-control">
                 <div>
-                    <select id="plugin-text-${index}" name="${name}">${options.join()}</select>
+                    <select id="plugin-text-${index}" name="${name}">${options.join('')}</select>
                     <label for="plugin-text-${index}">${content.label || content.key}</label>
                 </div>
                 <button value="${value}" ${value ? '' : 'disabled'} data-plugin-text-edit>
