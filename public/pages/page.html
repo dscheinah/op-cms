@@ -30,27 +30,31 @@
 
         render(() => {
             helper.set('#page button[type="submit"]', 'disabled', !changed);
+            // Initial rendering without data creates an empty page. Once loading is done, render will be called again.
             if (!data) {
                 return;
             }
             if (data.title) {
+                // Match the headline with the website template.
                 helper.set('#page h1', 'innerHTML', data.title);
             }
-            if (!data['sections']) {
-                return;
-            }
-            let index = 0;
-            helper.list('#page [data-sections]', data['sections'], (section) => {
-                const div = helper.create('div');
-                div.innerHTML = `<h2>${section.heading}</h2>`;
-                section['contents'].forEach((content) => {
-                    div.appendChild(plugins[content.type].render(pluginState, content, values || {}, index++));
+            if (data['sections']) {
+                let index = 0;
+                // Create a part with separate heading for each template section.
+                helper.list('#page [data-sections]', data['sections'], (section) => {
+                    const div = helper.create('div');
+                    div.innerHTML = `<h2>${section.heading}</h2>`;
+                    section['contents'].forEach((content) => {
+                      // Render the content selection using the plugin that matches the content's type.
+                      div.appendChild(plugins[content.type].render(pluginState, content, values || {}, index++));
+                    });
+                    return div;
                 });
-                return div;
-            });
+            }
         });
 
         show(() => {
+            // Call all plugins.
             Object.values(plugins).forEach((plugin) => plugin.show(pluginState));
         });
 
@@ -60,14 +64,18 @@
             state.dispatch('page-changed', false);
         });
         action('#page', 'change', (event, target) => {
+            // Create a value map from the current values of all form elements.
             state.dispatch('page-state', Object.fromEntries((new FormData(target)).entries()));
+            // Once the user changed a form element, assume a change without checking for real differences with backend.
             state.dispatch('page-changed', true);
         });
+        // Call all plugins.
         Object.values(plugins).forEach((plugin) => plugin.action(pluginState));
 
         listen('page-load', (page) => data = page || null);
         listen('page-state', (state) => values = state || {});
         listen('page-changed', (state) => changed = state || false);
+        // Call all plugins.
         Object.values(plugins).forEach((plugin) => plugin.listen(pluginState));
     });
 </script>

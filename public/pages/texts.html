@@ -46,10 +46,12 @@
         });
 
         action('#texts [data-add]', 'click', () => {
+            // To tell the edit page to render in "create" mode with empty form elements.
             state.dispatch('text-edit', false);
             page.show('texts-edit');
         });
         action('#texts [data-edit]', 'click', (event, target) => {
+            // To tell the edit page to render in "update" mode and use the loaded values.
             state.dispatch('text-edit', true);
             state.dispatch('text-load', parseInt(target.value));
             page.show('texts-edit');

@@ -8,8 +8,23 @@ use Sx\Container\FactoryInterface;
 use Sx\Container\Injector;
 use Sx\Template\Collector\Collector;
 
+/**
+ * Factory for the page repository.
+ */
 class PageRepositoryFactory implements FactoryInterface
 {
+    /**
+     * Creates the repository with access to the database and template collector.
+     *
+     * The repository will include the template file.
+     * Therefore, the correct template implementations for the collector need to be provided.
+     *
+     * @param Injector $injector
+     * @param array $options
+     * @param string $class
+     *
+     * @return PageRepository
+     */
     public function create(Injector $injector, array $options, string $class): PageRepository
     {
         $injector->setup(new TemplateCollectorProvider());

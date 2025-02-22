@@ -18,6 +18,7 @@ services:
   db:
     image: mysql
     volumes:
+      # This directory contains all SQL statements required to initialize the database.
       - ./sql:/docker-entrypoint-initdb.d
       - db:/var/lib/mysql
     environment:

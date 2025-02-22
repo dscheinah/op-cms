@@ -42,6 +42,7 @@ state.handle('loading', (payload, next) => {
 // Always disable the loading animation when any loaded page is ready.
 state.listen('sx-show', () => state.dispatch('loading', false));
 
+// Initialize backend and page state.
 init.repositories(state, {
     'page-load': PageRepository.load,
     'page-save': PageRepository.save,
@@ -49,6 +50,7 @@ init.repositories(state, {
     'text-load': TextRepository.load,
     'text-save': TextRepository.save,
     'text-remove': TextRepository.remove,
+    // Add more backend calls here if needed.
 });
 init.state(state);
 
@@ -60,6 +62,7 @@ init.state(state);
 page.add('page', 'pages/page.html', window.location.href);
 page.add('texts', 'pages/texts.html', window.location.href);
 page.add('texts-edit', 'pages/texts/edit.html', window.location.href);
+// Add more plugin configuration pages here if needed.
 
 // If used with routing this must be replaced with a check on the called route.
 page.show('page');

@@ -1,6 +1,6 @@
 {
     "name": "dscheinah/op-cms",
-    "description": "This is a common setup for a simple sx application.",
+    "description": "This is a CMS framework for tiny websites with only one template and one dynamic page.",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "require": {

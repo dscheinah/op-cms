@@ -14,6 +14,15 @@ use Sx\Template\Template\Title\TitleInterface;
 
 class TemplateCollectorProvider implements ProviderInterface
 {
+    /**
+     * Registers the template implementations used to provide all required data for the CMS app.
+     *
+     * This is called from the PageRepositoryFactory to provide a way to load the current (available) selections.
+     *
+     * @param Injector $injector
+     *
+     * @return void
+     */
     public function provide(Injector $injector): void
     {
         Template::set(SectionInterface::class, $injector->get(SectionCollector::class));

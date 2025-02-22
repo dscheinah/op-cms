@@ -27,6 +27,7 @@
     page.register('texts-edit', ({render, action, listen}) => {
         render(() => {
             helper.set('#texts-edit [data-type]', 'innerHTML', edit ? 'bearbeiten' : 'hinzufügen');
+            // If a new text should be created, no loaded backend data will be used.
             helper.set('#texts-edit-name', 'value', edit ? data.name : '');
             helper.set('#texts-edit-content', 'value', edit ? data.content : '');
             helper.set('#texts-edit [data-remove]', 'hidden', !edit);
@@ -36,6 +37,7 @@
             event.preventDefault();
             const formData = new FormData(event.target);
             if (edit) {
+                // Need to tell the backend which text to update.
                 formData.append('id', data.id);
             }
             state.dispatch('text-save', formData);
@@ -48,6 +50,7 @@
 
         listen('text-load', (text) => data = text || {});
         listen('text-edit', (trigger) => edit = trigger);
+        // After save, return to the previous page - can be text-list or page.
         listen('text-save', () => {
             history.back();
         });
