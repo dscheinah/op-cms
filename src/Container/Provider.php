@@ -32,6 +32,7 @@ use Sx\Server\ApplicationInterface;
 use Sx\Server\Container\ServerProvider;
 use Sx\Server\RouterInterface;
 use Sx\Template\Container\TemplateProvider;
+use Sx\Template\Markdown\Container\TemplateMarkdownProvider;
 use Sx\Template\PageValueProviderInterface;
 use Sx\Template\TextValueProviderInterface;
 
@@ -54,6 +55,7 @@ class Provider implements ProviderInterface
         $injector->setup(new ServerProvider());
 
         $injector->setup(new TemplateProvider());
+        $injector->setup(new TemplateMarkdownProvider());
 
         // Add all local classes and factories.
         $injector->set(ApplicationInterface::class, ApplicationFactory::class);
