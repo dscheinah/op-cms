@@ -20,3 +20,15 @@
     --tertiary-color: #046F93;
     --tertiary-color-highlight: #0DADE1;
 }
+
+.toastui-editor-contents h3, .toastui-editor-contents h4 {
+    margin: 18px 0;
+}
+
+.toastui-editor-contents h5, .toastui-editor-contents h6 {
+    margin: 9px 0;
+}
+
+.toastui-editor-contents ul > li::before {
+    margin-top: 8px;
+}
