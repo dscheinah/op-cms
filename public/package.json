@@ -1,0 +1,9 @@
+{
+  "name": "public",
+  "dependencies": {
+    "@toast-ui/editor": "^3.2.2"
+  },
+  "devDependencies": {
+    "@jsenv/importmap-node-module": "^6.0.0"
+  }
+}

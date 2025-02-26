@@ -23,11 +23,11 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --classmap-authoritativ
 # Build and minify all public files. This needs the vendor styles and js from composer.
 FROM node AS build
 ADD ./build /build
-WORKDIR /build
-RUN npm ci
+RUN cd /build && npm ci
 ADD ./public /public
+RUN cd /public && npm ci --omit=dev
 COPY --from=vendor /var/www/html/public/vendor /public/vendor
-RUN node build.js
+RUN cd /build && node build.js
 
 # Create the final image.
 FROM base

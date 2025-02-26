@@ -22,6 +22,7 @@ function defaults() {
                 modulePaths: [
                     'node_modules',
                     path.normalize(`${path.dirname(__filename)}/../node_modules`),
+                    path.normalize(`${path.dirname(__filename)}/../../public/node_modules`),
                 ],
             }),
             rollupCommonJs(),

@@ -12,3 +12,4 @@ docker-compose.override.yml
 !.gitignore
 !.*.dist
 !.htaccess
+/public/node_modules

@@ -26,6 +26,7 @@ fs.rmSync('dist', {recursive: true, force: true});
 // All imports will be resolved. Export of the main file are kept to be used in pages.
 [
     '../public/js/app.js',
+    '../public/pages/texts/edit.js',
 ].forEach((file) => {
     dist(file);
     js.entry(file, hash).catch((error) => {

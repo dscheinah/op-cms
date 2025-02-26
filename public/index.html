@@ -6,6 +6,25 @@
         <title>sx|opCMS</title>
         <!-- The main CSS is loaded synchronously. More styles should be handles manually or in pages. -->
         <link type="text/css" href="css/app.css" rel="stylesheet"/>
+        <script type="importmap">
+          {
+            "imports": {
+              "@toast-ui/editor": "./node_modules/@toast-ui/editor/dist/esm/index.js",
+              "@toast-ui/editor/dist/i18n/de-de": "./node_modules/@toast-ui/editor/dist/esm/i18n/de-de.js",
+              "prosemirror-inputrules": "./node_modules/prosemirror-inputrules/dist/index.js",
+              "prosemirror-transform": "./node_modules/prosemirror-transform/dist/index.js",
+              "prosemirror-commands": "./node_modules/prosemirror-commands/dist/index.js",
+              "prosemirror-history": "./node_modules/prosemirror-history/dist/index.js",
+              "prosemirror-keymap": "./node_modules/prosemirror-keymap/dist/index.js",
+              "prosemirror-model": "./node_modules/prosemirror-model/dist/index.js",
+              "prosemirror-state": "./node_modules/prosemirror-state/dist/index.js",
+              "prosemirror-view": "./node_modules/prosemirror-view/dist/index.js",
+              "rope-sequence": "./node_modules/rope-sequence/dist/index.js",
+              "w3c-keyname": "./node_modules/w3c-keyname/index.js",
+              "orderedmap": "./node_modules/orderedmap/dist/index.js"
+            }
+          }
+        </script>
         <script>
             (function () {
                 /**
@@ -40,7 +59,7 @@
                 </div>
             </nav>
             <!-- CSS module prefixes must be added here. -->
-            <main id="main" class="sx-container sx-content sx-limit sx-form sx-button sx-table"></main>
+            <main id="main" class="sx-container sx-content sx-limit sx-form sx-table"></main>
         </div>
         <script type="module" src="js/app.js"></script>
     </body>

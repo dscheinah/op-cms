@@ -10,9 +10,10 @@
         </details>
         <input type="text" id="texts-edit-name" name="name" required/>
         <label for="texts-edit-name">Name <small>nur intern verwendet</small></label>
-        <textarea id="texts-edit-content" name="content" required></textarea>
+        <div id="texts-edit-editor"></div>
+        <textarea id="texts-edit-content" name="content" required hidden></textarea>
         <label for="texts-edit-content">Inhalt</label>
-        <div class="sx-actions">
+        <div class="sx-actions sx-button">
             <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
             <button type="button" data-remove hidden><span class="sx-button-icon">🗑</span> löschen</button>
         </div>
@@ -21,6 +22,25 @@
 
 <script type="module">
     import {helper, page, state} from '../../js/app.js';
+    import {ToastUiEditor} from '../../pages/texts/edit.js';
+
+    const editor = new ToastUiEditor({
+      el: helper.element('#texts-edit-editor'),
+      height: 'auto',
+      initialEditType: 'wysiwyg',
+      previewStyle: 'vertical',
+      usageStatistics: false,
+      language: 'de-DE',
+      toolbarItems: [
+        ['heading', 'bold', 'italic', 'strike'],
+        ['hr', 'quote'],
+        ['ul', 'ol', 'indent', 'outdent'],
+        ['table', 'link'],
+      ]
+    });
+    editor.on('change', () => {
+      helper.set('#texts-edit-content', 'value', editor.getMarkdown());
+    });
 
     let data = state.get('text-load') || {}, edit = state.get('text-edit');
 
@@ -30,6 +50,7 @@
             // If a new text should be created, no loaded backend data will be used.
             helper.set('#texts-edit-name', 'value', edit ? data.name : '');
             helper.set('#texts-edit-content', 'value', edit ? data.content : '');
+            editor.setMarkdown(edit ? data.content : '');
             helper.set('#texts-edit [data-remove]', 'hidden', !edit);
         });
 
