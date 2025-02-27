@@ -19,6 +19,7 @@ use Sx\Data\BackendInterface;
 use Sx\Server\ApplicationInterface;
 use Sx\Server\RouterInterface;
 use Sx\Template\Collector\Collector;
+use Sx\Template\Markdown\Text\TextMarkdownEmitter;
 use Sx\Template\PageValueProviderInterface;
 use Sx\Template\TextValueProviderInterface;
 
@@ -30,6 +31,7 @@ class ProviderTest extends TestCase
         $provider = new Provider();
         $provider->provide($injector);
         self::assertTrue($injector->has(Collector::class));
+        self::assertTrue($injector->has(TextMarkdownEmitter::class));
         self::assertTrue($injector->has(ApplicationInterface::class));
         self::assertTrue($injector->has(RouterInterface::class));
         self::assertTrue($injector->has(BackendInterface::class));

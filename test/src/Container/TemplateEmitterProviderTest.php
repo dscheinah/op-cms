@@ -5,6 +5,7 @@ namespace Container;
 use App\Container\TemplateEmitterProvider;
 use PHPUnit\Framework\TestCase;
 use Sx\Container\Injector;
+use Sx\Template\Markdown\Text\TextMarkdownEmitter;
 use Sx\Template\Template\Section\SectionEmitter;
 use Sx\Template\Template\Section\SectionInterface;
 use Sx\Template\Template\Template;
@@ -19,7 +20,7 @@ class TemplateEmitterProviderTest extends TestCase
     {
         $injector = new Injector();
         $injector->set(SectionEmitter::class, $this->createMock(SectionInterface::class));
-        $injector->set(TextEmitter::class, $this->createMock(TextInterface::class));
+        $injector->set(TextMarkdownEmitter::class, $this->createMock(TextInterface::class));
         $injector->set(TitleEmitter::class, $this->createMock(TitleInterface::class));
         $provider = new TemplateEmitterProvider();
         $provider->provide($injector);
