@@ -1,11 +1,37 @@
 <?php
 
+use Sx\Template\Template\Calendar\CalendarInterface;
+use Sx\Template\Template\Calendar\DTO\CalendarEntryDTO;
 use Sx\Template\Template\Section\SectionInterface;
 use Sx\Template\Template\Template;
 use Sx\Template\Template\Text\TextInterface;
 use Sx\Template\Template\Title\TitleInterface;
 
 Template::get(TitleInterface::class)->set('Beispiel-Seite');
+
+Template::get(CalendarInterface::class)->renderNext(
+    function (CalendarEntryDTO $entry) {
+        extract((array) $entry);
+
+        $date = $date->format('d.m.Y');
+        $time = $time?->format('H:i');
+
+        return "<p><strong>$title:</strong> $date $time $place</p>";
+    }
+);
+Template::get(CalendarInterface::class)->renderList(
+    function (CalendarEntryDTO $entry) {
+        extract((array) $entry);
+
+        $date = $date->format('d.m.Y');
+        $time = $time?->format('H:i');
+        $description = str_replace("\n", "<br>", trim($description));
+
+        return "<h3>$title</h3><p><strong>$date $time $place</strong></p>"
+            . ($description ? "<p>$description</p>" : '')
+            . ($link ? "<a href=\"$link\" target=\"_blank\" rel=\"noopener\">$link</a>" : '');
+    }
+);
 
 ?>
 <!doctype html>
@@ -18,7 +44,10 @@ Template::get(TitleInterface::class)->set('Beispiel-Seite');
 <body>
     <h1><?= Template::get(TitleInterface::class)->title() ?></h1>
     <?= Template::get(TextInterface::class)->text('introduction', 'Einleitung') ?>
+    <?= Template::get(CalendarInterface::class)->next(1) ?>
     <?= Template::get(TextInterface::class)->text('content', 'Inhalt') ?>
+    <h2><?= Template::get(SectionInterface::class)->section('Nächste Termine') ?></h2>
+    <?= Template::get(CalendarInterface::class)->list() ?: '<p>Es sind keine Termine vorhanden.</p>' ?>
     <h2><?= Template::get(SectionInterface::class)->section('Impressum') ?></h2>
     <?= Template::get(TextInterface::class)->text('imprint', 'Impressum') ?>
 </body>

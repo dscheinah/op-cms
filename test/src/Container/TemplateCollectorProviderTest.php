@@ -5,6 +5,8 @@ namespace Container;
 use App\Container\TemplateCollectorProvider;
 use PHPUnit\Framework\TestCase;
 use Sx\Container\Injector;
+use Sx\Template\Template\Calendar\CalendarCollector;
+use Sx\Template\Template\Calendar\CalendarInterface;
 use Sx\Template\Template\Section\SectionCollector;
 use Sx\Template\Template\Section\SectionInterface;
 use Sx\Template\Template\Template;
@@ -18,11 +20,13 @@ class TemplateCollectorProviderTest extends TestCase
     public function testProvide(): void
     {
         $injector = new Injector();
+        $injector->set(CalendarCollector::class, $this->createMock(CalendarInterface::class));
         $injector->set(SectionCollector::class, $this->createMock(SectionInterface::class));
         $injector->set(TextCollector::class, $this->createMock(TextInterface::class));
         $injector->set(TitleCollector::class, $this->createMock(TitleInterface::class));
         $provider = new TemplateCollectorProvider();
         $provider->provide($injector);
+        self::assertNotNull(Template::get(CalendarInterface::class));
         self::assertNotNull(Template::get(SectionInterface::class));
         self::assertNotNull(Template::get(TextInterface::class));
         self::assertNotNull(Template::get(TitleInterface::class));

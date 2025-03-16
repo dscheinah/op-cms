@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Handler\CalendarLoadHandler;
+use App\Handler\CalendarRemoveHandler;
+use App\Handler\CalendarSaveHandler;
 use App\Handler\PageLoadHandler;
 use App\Handler\PageSaveHandler;
 use App\Handler\TextListHandler;
@@ -40,6 +43,10 @@ class RouterFactory implements FactoryInterface
         $router->get($prefix . 'text/load', TextLoadHandler::class);
         $router->post($prefix . 'text/save', TextSaveHandler::class);
         $router->delete($prefix . 'text/remove', TextRemoveHandler::class);
+
+        $router->get($prefix . 'calendar/load', CalendarLoadHandler::class);
+        $router->post($prefix . 'calendar/save', CalendarSaveHandler::class);
+        $router->delete($prefix . 'calendar/remove', CalendarRemoveHandler::class);
 
         return $router;
     }

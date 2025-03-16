@@ -1,0 +1,72 @@
+<template>
+    <form id="calendar-edit">
+        <h1>Termin <span data-type></span></h1>
+        <details>
+            <summary>Hier kannst du einen Termin bearbeiten.</summary>
+            <p>
+                Alle Änderungen werden direkt beim Speichern sichtbar. Ebenso sind gelöschte Termine sofort weg.
+            </p>
+        </details>
+        <input type="date" id="calendar-edit-date" name="date" required/>
+        <label for="calendar-edit-date">Datum</label>
+        <input type="time" id="calendar-edit-time" name="time"/>
+        <label for="calendar-edit-time">Uhrzeit</label>
+        <input type="text" id="calendar-edit-place" name="place"/>
+        <label for="calendar-edit-place">Ort</label>
+        <input type="text" id="calendar-edit-title" name="title" required/>
+        <label for="calendar-edit-title">Name</label>
+        <textarea id="calendar-edit-description" name="description"></textarea>
+        <label for="calendar-edit-description">Beschreibung</label>
+        <input type="url" id="calendar-edit-link" name="link"/>
+        <label for="calendar-edit-link">Externer Link</label>
+        <div class="sx-actions sx-button">
+            <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
+            <button type="button" data-remove hidden><span class="sx-button-icon">🗑</span> löschen</button>
+        </div>
+    </form>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../../js/app.js';
+
+    let data = state.get('calendar-load') || [], edit = parseInt(state.get('calendar-edit'));
+
+    page.register('calendar-edit', ({render, action, listen}) => {
+        render(() => {
+            helper.set('#calendar-edit [data-type]', 'innerHTML', edit ? 'bearbeiten' : 'hinzufügen');
+            helper.set('#calendar-edit [data-remove]', 'hidden', !edit);
+
+            helper.set('#calendar-edit-date', 'min', new Date().toISOString().substring(0, 10));
+
+            const entry = data.find((item) => parseInt(item.id) === edit) || {};
+
+            helper.set('#calendar-edit-date', 'value', entry['date'] || null);
+            helper.set('#calendar-edit-time', 'value', entry['time'] || null);
+            helper.set('#calendar-edit-place', 'value', entry['place'] || '');
+            helper.set('#calendar-edit-title', 'value', entry['title'] || '');
+            helper.set('#calendar-edit-description', 'innerHTML', entry['description'] || '');
+            helper.set('#calendar-edit-link', 'value', entry['link'] || '');
+        });
+
+        action('#calendar-edit', 'submit', (event, target) => {
+            event.preventDefault();
+            const formData = new FormData(target);
+            if (edit) {
+                // Need to tell the backend which entry to update.
+                formData.append('id', edit);
+            }
+            state.dispatch('calendar-save', formData);
+        });
+        action('#calendar-edit [data-remove]', 'click', () => {
+            if (confirm('Soll der Termin wirklich gelöscht werden?')) {
+                state.dispatch('calendar-remove', edit);
+            }
+        });
+
+        listen('calendar-load', (calendar) => data = calendar || []);
+        listen('calendar-edit', (id) => edit = parseInt(id));
+        // Return to the list page after save or remove.
+        listen('calendar-save', () => history.back());
+        listen('calendar-remove', () => history.back());
+    });
+</script>

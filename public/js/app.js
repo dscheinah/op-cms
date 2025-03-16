@@ -5,6 +5,7 @@ import navigate from './app/navigate.js';
 import * as init from './app/init.js';
 import * as PageRepository from './repository/page.js';
 import * as TextRepository from './repository/text.js';
+import * as CalendarRepository from './repository/calendar.js';
 // By separating the helpers to its own namespace they do not need to packed to an object here.
 import * as helper from './helper.js';
 import * as plugins from './plugins.js';
@@ -50,6 +51,9 @@ init.repositories(state, {
     'text-load': TextRepository.load,
     'text-save': TextRepository.save,
     'text-remove': TextRepository.remove,
+    'calendar-load': CalendarRepository.load,
+    'calendar-save': CalendarRepository.save,
+    'calendar-remove': CalendarRepository.remove,
     // Add more backend calls here if needed.
 });
 init.state(state);
@@ -62,6 +66,8 @@ init.state(state);
 page.add('page', 'pages/page.html', window.location.href);
 page.add('texts', 'pages/texts.html', window.location.href);
 page.add('texts-edit', 'pages/texts/edit.html', window.location.href);
+page.add('calendar', 'pages/calendar.html', window.location.href);
+page.add('calendar-edit', 'pages/calendar/edit.html', window.location.href);
 // Add more plugin configuration pages here if needed.
 
 // If used with routing this must be replaced with a check on the called route.

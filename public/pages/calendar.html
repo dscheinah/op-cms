@@ -1,0 +1,72 @@
+<template>
+    <div id="calendar" class="sx-button">
+        <h1>Termine</h1>
+        <details>
+            <summary>Bearbeite bestehende Termine, lösche obsolete oder füge neue hinzu.</summary>
+            <p>
+                Wenn du bestehende Termine bearbeitest, werden die Änderungen sofort sichtbar.
+                Veraltete Termine werden automatisch aus der Anzeige entfernt.
+            </p>
+        </details>
+        <table class="sx-list">
+            <colgroup>
+                <col/>
+                <col/>
+                <col/>
+                <col class="sx-action"/>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Ort</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="sx-actions">
+            <button type="button" data-add>
+                <span class="sx-button-icon">＋</span> hinzufügen
+            </button>
+        </div>
+    </div>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../js/app.js';
+
+    let data = state.get('calendar-load') || [];
+
+    page.register('calendar', ({render, show, action, listen}) => {
+        render(() => {
+            helper.list('#calendar tbody', data, (item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(item['date']).toLocaleDateString()} ${(item['time'] || '').substring(0, 5)}</td>
+                    <td>${item['place'] || ''}</td>
+                    <td>${item['title'] || ''}</td>
+                    <td><button type="button" value="${item.id}" data-edit><span class="sx-button-icon">▽</span> mehr</button></td>
+                `;
+                return row;
+            });
+        });
+
+        show(() => {
+            state.dispatch('calendar-load', null);
+        });
+
+        action('#calendar [data-add]', 'click', () => {
+            // To tell the edit page to render in "create" mode with empty form elements.
+            state.dispatch('calendar-edit', null);
+            page.show('calendar-edit');
+        });
+        action('#calendar [data-edit]', 'click', (event, target) => {
+            // To tell the edit page to render in "update" mode and use the entry with the given id.
+            state.dispatch('calendar-edit', target.value);
+            page.show('calendar-edit');
+        });
+
+        listen('calendar-load', (calendar) => data = calendar || []);
+    });
+</script>
