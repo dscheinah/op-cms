@@ -25,7 +25,7 @@ Template::get(CalendarInterface::class)->renderList(
 
         $date = $date->format('d.m.Y');
         $time = $time?->format('H:i');
-        $description = str_replace("\n", "<br>", trim($description));
+        $description = str_replace("\n", "<br>", trim((string) $description));
 
         return "<h3>$title</h3><p><strong>$date $time $place</strong></p>"
             . ($description ? "<p>$description</p>" : '')
