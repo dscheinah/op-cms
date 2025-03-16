@@ -57,6 +57,6 @@
             page.show('texts-edit');
         });
 
-        listen('text-list', (texts) => data = texts);
+        listen('text-list', (texts) => data = texts || []);
     });
 </script>

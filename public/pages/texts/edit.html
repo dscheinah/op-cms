@@ -54,9 +54,9 @@
             helper.set('#texts-edit [data-remove]', 'hidden', !edit);
         });
 
-        action('#texts-edit', 'submit', (event) => {
+        action('#texts-edit', 'submit', (event, target) => {
             event.preventDefault();
-            const formData = new FormData(event.target);
+            const formData = new FormData(target);
             if (edit) {
                 // Need to tell the backend which text to update.
                 formData.append('id', data.id);
@@ -71,12 +71,8 @@
 
         listen('text-load', (text) => data = text || {});
         listen('text-edit', (trigger) => edit = trigger);
-        // After save, return to the previous page - can be text-list or page.
-        listen('text-save', () => {
-            history.back();
-        });
-        listen('text-remove', () => {
-            history.back();
-        });
+        // Return to the previous page after save or remove - can be text-list or page.
+        listen('text-save', () => history.back());
+        listen('text-remove', () => history.back());
     });
 </script>
