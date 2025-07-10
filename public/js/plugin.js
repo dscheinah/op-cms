@@ -10,9 +10,12 @@ export default class Plugin {
      * @param {PluginState} pluginState Provides access to variables from the page.
      * @param {PluginContent} content The provided content from the template with the saved value.
      * @param {object} values All currently selected (unsaved) values as {name: value}.
-     * @param {integer} index The current unique index usable for id creation.
+     * @param {number} index The current unique index usable for id creation.
+     *
+     * @returns {Node}
      */
     render(pluginState, content, values, index) {
+        return document.createElement('div');
     }
 
     /**

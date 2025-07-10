@@ -10,7 +10,7 @@ class Calendar extends Plugin {
      * @param {object} helper
      * @param {PluginContent} content
      * @param {object} values
-     * @param {integer} index
+     * @param {number} index
      *
      * @returns {HTMLDivElement}
      */
