@@ -38,7 +38,7 @@ class Text extends Plugin {
                     <select id="plugin-text-${index}" name="${name}">${options.join('')}</select>
                     <label for="plugin-text-${index}">${content.label || content.key}</label>
                 </div>
-                <button value="${value}" ${value ? '' : 'disabled'} data-plugin-text-edit>
+                <button type="button" value="${value}" ${value ? '' : 'disabled'} data-plugin-text-edit>
                   <span class="sx-button-icon">✏️</span> bearbeiten
               </button>
             </div>

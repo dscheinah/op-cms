@@ -22,7 +22,7 @@ class Calendar extends Plugin {
         const element = helper.create('div');
         element.innerHTML = `
             <p>
-                <button data-navigation value="calendar">
+                <button type="button" data-navigation value="calendar">
                     <span class="sx-button-icon">📅</span>  ${translations[content.key] || 'Termine'}
                 </button>   
             </p>
