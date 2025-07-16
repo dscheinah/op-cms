@@ -6,3 +6,4 @@ export {default as list} from '../vendor/dscheinah/sx-js/src/helper/list.js';
 export {default as set} from '../vendor/dscheinah/sx-js/src/helper/set.js';
 export {default as style} from '../vendor/dscheinah/sx-js/src/helper/style.js';
 export {default as get} from '../vendor/dscheinah/sx-js/src/helper/get.js';
+export {default as page} from './helper/page.js';
