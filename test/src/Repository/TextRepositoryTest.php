@@ -6,7 +6,6 @@ use App\Repository\TextRepository;
 use App\Storage\TextStorage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Sx\Template\Collector\Collector;
 
 class TextRepositoryTest extends TestCase
 {
@@ -17,7 +16,6 @@ class TextRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->textStorageMock = $this->createMock(TextStorage::class);
-        $this->collectorMock = $this->createMock(Collector::class);
         $this->repository = new TextRepository(
             $this->textStorageMock,
         );

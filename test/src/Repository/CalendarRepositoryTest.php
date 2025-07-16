@@ -6,7 +6,6 @@ use App\Repository\CalendarRepository;
 use App\Storage\CalendarStorage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Sx\Template\Collector\Collector;
 
 class CalendarRepositoryTest extends TestCase
 {
@@ -17,7 +16,6 @@ class CalendarRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->calendarStorageMock = $this->createMock(CalendarStorage::class);
-        $this->collectorMock = $this->createMock(Collector::class);
         $this->repository = new CalendarRepository(
             $this->calendarStorageMock,
         );
