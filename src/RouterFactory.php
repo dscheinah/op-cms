@@ -5,12 +5,21 @@ namespace App;
 use App\Handler\CalendarLoadHandler;
 use App\Handler\CalendarRemoveHandler;
 use App\Handler\CalendarSaveHandler;
+use App\Handler\GalleryListHandler;
+use App\Handler\GalleryLoadHandler;
+use App\Handler\GalleryRemoveHandler;
+use App\Handler\GallerySaveHandler;
+use App\Handler\ImageListHandler;
+use App\Handler\ImageLoadHandler;
+use App\Handler\ImageRemoveHandler;
+use App\Handler\ImageSaveHandler;
 use App\Handler\PageLoadHandler;
 use App\Handler\PageSaveHandler;
 use App\Handler\TextListHandler;
 use App\Handler\TextLoadHandler;
 use App\Handler\TextRemoveHandler;
 use App\Handler\TextSaveHandler;
+use Sx\Application\Middleware\UploadedFilesMiddleware;
 use Sx\Container\FactoryInterface;
 use Sx\Container\Injector;
 use Sx\Server\MiddlewareHandlerInterface;
@@ -43,6 +52,17 @@ class RouterFactory implements FactoryInterface
         $router->get($prefix . 'text/load', TextLoadHandler::class);
         $router->post($prefix . 'text/save', TextSaveHandler::class);
         $router->delete($prefix . 'text/remove', TextRemoveHandler::class);
+
+        $router->get($prefix . 'image/list', ImageListHandler::class);
+        $router->get($prefix . 'image/load', ImageLoadHandler::class);
+        $router->post($prefix . 'image/save', UploadedFilesMiddleware::class);
+        $router->post($prefix . 'image/save', ImageSaveHandler::class);
+        $router->delete($prefix . 'image/remove', ImageRemoveHandler::class);
+
+        $router->get($prefix . 'gallery/list', GalleryListHandler::class);
+        $router->get($prefix . 'gallery/load', GalleryLoadHandler::class);
+        $router->post($prefix . 'gallery/save', GallerySaveHandler::class);
+        $router->delete($prefix . 'gallery/remove', GalleryRemoveHandler::class);
 
         $router->get($prefix . 'calendar/load', CalendarLoadHandler::class);
         $router->post($prefix . 'calendar/save', CalendarSaveHandler::class);

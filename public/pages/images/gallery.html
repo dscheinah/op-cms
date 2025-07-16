@@ -1,0 +1,179 @@
+<template>
+    <form id="images-gallery" class="sx-button">
+        <h1>Sammlung <span data-type></span></h1>
+        <details>
+            <summary>Hier kannst du eine Sammlung bearbeiten.</summary>
+            <p>
+                Füge neue Bilder hinzu, ändere die Reihenfolge oder entferne Bilder.
+                Alle Änderungen werden direkt beim Speichern sichtbar.
+                Der Name dient nur dazu, die Sammlung bei der Pflege wiederzufinden.
+            </p>
+        </details>
+        <input type="text" id="images-gallery-name" name="name" required/>
+        <label for="images-gallery-name">Name <small>nur intern verwendet</small></label>
+        <h2>Bilder</h2>
+        <ul id="images-gallery-assigned"></ul>
+        <div class="sx-control">
+            <div>
+                <select id="images-gallery-assign"></select>
+                <label for="images-gallery-assign">Bild auswählen</label>
+            </div>
+            <button type="button" data-assign><span class="sx-button-icon">＋</span> hinzufügen</button>
+        </div>
+        <div class="sx-actions">
+            <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
+            <button type="button" data-remove hidden><span class="sx-button-icon">🗑</span> löschen</button>
+        </div>
+    </form>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../../js/app.js';
+
+    let data = state.get('gallery-load') || {images: []},
+        edit = state.get('gallery-edit'),
+        images = state.get('image-list') || [];
+
+    page.register('images-gallery', ({render, show, action, listen}) => {
+        render(() => {
+            helper.set('#images-gallery [data-type]', 'innerHTML', edit ? 'bearbeiten' : 'hinzufügen');
+            // If a new gallery should be created, no loaded backend data will be used.
+            helper.set('#images-gallery-name', 'value', edit ? data.name : '');
+            helper.set('#images-gallery [data-remove]', 'hidden', !edit);
+
+            const selected = data.images
+                .map((id) => images.find((element) => element.id === id))
+                .filter((image) => !!image);
+            helper.list('#images-gallery-assigned', selected, (image) => {
+                const li = helper.create('li');
+                li.draggable = true;
+                li.dataset.id = image.id;
+                li.innerHTML = `
+                    <input type="hidden" name="images[]" value="${image.id}"/>
+                    <div class="sx-control">
+                        <div class="sx-button-icon images-gallery-move"><span>↕</span></div>
+                        <div>${image.name}</div>
+                        <button type="button" value="${image.id}" data-unassign>
+                            <span class="sx-button-icon">−</span> entfernen
+                        </button>
+                    </div>
+                `;
+                return li;
+            });
+            helper.list('#images-gallery-assign', images.filter((image) => !data.images.includes(image.id)), (image) => {
+                const option = helper.create('option');
+                option.value = image.id;
+                option.text = image.name;
+                return option;
+            });
+        });
+
+        show(() => {
+            state.dispatch('image-list', null);
+        });
+
+        action('#images-gallery [data-assign]', 'click', () => {
+            state.dispatch('gallery-images', [...data.images, parseInt(helper.get('#images-gallery-assign', 'value'))]);
+        });
+        action('#images-gallery [data-unassign]', 'click', (event, target) => {
+            const id = parseInt(target.value);
+            state.dispatch('gallery-images', data.images.filter((image) => image !== id));
+        });
+        action('#images-gallery', 'submit', (event, target) => {
+            event.preventDefault();
+            const formData = new FormData(target);
+            if (edit) {
+                // Need to tell the backend which gallery to update.
+                formData.append('id', data.id);
+            }
+            state.dispatch('gallery-save', formData);
+        });
+        action('#images-gallery [data-remove]', 'click', () => {
+            if (confirm('Soll die Sammlung wirklich gelöscht werden?')) {
+                state.dispatch('gallery-remove', data.id);
+            }
+        });
+
+        action('#images-gallery-assigned li', 'dragstart', (event, target) => {
+            event.dataTransfer.setData('text/plain', target.dataset.id);
+            event.dataTransfer.effectAllowed = 'move';
+        });
+        action('#images-gallery-assigned li', 'dragover', (event, target) => {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            target.style.background = 'var(--secondary-color-highlight)';
+        });
+        action('#images-gallery-assigned li', 'dragleave', (event, target) => {
+            target.style.background = null;
+        });
+        action('#images-gallery-assigned li', 'dragend', () => {
+            helper.set('#images-gallery-assigned li', 'style', '');
+        });
+        action('#images-gallery-assigned li', 'drop', (event, target) => {
+            event.preventDefault();
+
+            const dragged = parseInt(event.dataTransfer.getData('text/plain'));
+            const dropped = parseInt(target.dataset.id);
+            if (dragged === dropped) {
+                return;
+            }
+
+            let foundDragged = false;
+            const images = [];
+            data.images.forEach((element) => {
+                if (element === dragged) {
+                    foundDragged = true;
+                    return;
+                }
+                if (element === dropped) {
+                    if (foundDragged) {
+                        images.push(element, dragged);
+                    } else {
+                        images.push(dragged, element);
+                    }
+                    return;
+                }
+                images.push(element);
+            });
+            state.dispatch('gallery-images', images);
+        });
+
+        listen('gallery-load', (gallery) => data = gallery || {});
+        listen('gallery-edit', (trigger) => edit = trigger);
+        listen('gallery-images', (assigned) => (data.images = assigned));
+        listen('image-list', (data) => images = data);
+        // Return to the previous page after save or remove - can be image-list or page.
+        listen('gallery-save', () => history.back());
+        listen('gallery-remove', () => history.back());
+    });
+</script>
+
+<style>
+    #images-gallery-assigned {
+        list-style: none;
+        padding: 0;
+    }
+
+    #images-gallery-assigned li {
+        cursor: grabbing;
+        padding: .6em;
+        transition: background .2s;
+    }
+
+    #images-gallery-assigned li > div {
+        align-items: center;
+        width: 100%;
+    }
+
+    .images-gallery-move {
+        flex: 0 0 0;
+    }
+
+    .images-gallery-move span {
+        font-size: 1.5em;
+    }
+
+    #images-gallery-assigned li:not(:first-child) {
+        border-top: 1px solid lightgray;
+    }
+</style>

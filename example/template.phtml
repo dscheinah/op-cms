@@ -1,5 +1,8 @@
 <?php
 
+use Sx\Template\Image\DTO\ImageConfigurationDTO;
+use Sx\Template\Image\Template\GalleryInterface;
+use Sx\Template\Image\Template\ImageInterface;
 use Sx\Template\Template\Calendar\CalendarInterface;
 use Sx\Template\Template\Calendar\DTO\CalendarEntryDTO;
 use Sx\Template\Template\Section\SectionInterface;
@@ -33,6 +36,14 @@ Template::get(CalendarInterface::class)->renderList(
     }
 );
 
+$galleryConfig = new ImageConfigurationDTO();
+$galleryConfig->width = 320;
+$galleryConfig->height = 320;
+
+$imageConfig = new ImageConfigurationDTO();
+$imageConfig->use_thumbnail = true;
+$imageConfig->thumbnail_width = 160;
+
 ?>
 <!doctype html>
 <html lang="de">
@@ -40,15 +51,32 @@ Template::get(CalendarInterface::class)->renderList(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= Template::get(TitleInterface::class)->title() ?></title>
+    <style>
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1em;
+            list-style: none;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
     <h1><?= Template::get(TitleInterface::class)->title() ?></h1>
     <?= Template::get(TextInterface::class)->text('introduction', 'Einleitung') ?>
     <?= Template::get(CalendarInterface::class)->next(1) ?>
     <?= Template::get(TextInterface::class)->text('content', 'Inhalt') ?>
+    <ul class="gallery">
+        <?php foreach (Template::get(GalleryInterface::class)->gallery('gallery', $galleryConfig, 'Galerie') as $image): ?>
+            <li><?= $image ?></li>
+        <?php endforeach; ?>
+    </ul>
     <h2><?= Template::get(SectionInterface::class)->section('Nächste Termine') ?></h2>
     <?= Template::get(CalendarInterface::class)->list() ?: '<p>Es sind keine Termine vorhanden.</p>' ?>
     <h2><?= Template::get(SectionInterface::class)->section('Impressum') ?></h2>
     <?= Template::get(TextInterface::class)->text('imprint', 'Impressum') ?>
+    <?php if ($image = Template::get(ImageInterface::class)->image('image', $imageConfig, 'Bild')): ?>
+        <a href="<?= $image->image->url ?>" target="_blank"><?= $image ?></a>
+    <?php endif; ?>
 </body>
 </html>

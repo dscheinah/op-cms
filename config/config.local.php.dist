@@ -13,6 +13,12 @@ return [
         'password' => getenv('MYSQL_PASSWORD'),
         'database' => getenv('MYSQL_DATABASE'),
     ],
+    'image' => [
+        'directory' => __DIR__ . '/../example/public/bilder/',
+        'prefix' => '/bilder/',
+        'source' => __DIR__ . '/../data/images/',
+        'cache' => __DIR__ . '/../data/cache/',
+    ],
     // Included by CMS PageRepository to read all available keys from the template.
     'template' => __DIR__ . '/../example/template.phtml'
 ];

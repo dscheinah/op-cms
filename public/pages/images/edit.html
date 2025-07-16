@@ -1,0 +1,80 @@
+<template>
+    <form id="images-edit">
+        <h1>Bild <span data-type></span></h1>
+        <details>
+            <summary>Hier kannst du ein Bild bearbeiten.</summary>
+            <p>
+                Alle Änderungen werden direkt beim Speichern sichtbar. Ebenso sind gelöschte Bilder sofort weg.
+                Der Name dient nur dazu, das Bild bei der Pflege wiederzufinden.
+                Das Bild selber kann nicht bearbeitet werden. Erstelle in diesem Fall ein neues.
+            </p>
+        </details>
+        <input type="text" id="images-edit-name" name="name" required/>
+        <label for="images-edit-name">Name <small>nur intern verwendet</small></label>
+        <input type="text" id="images-edit-src" name="src"/>
+        <label for="images-edit-src">Dateiname für URL <small>vermeide Sonderzeichen und verwende Minus statt Leerzeichen</small></label>
+        <input type="text" id="images-edit-alt" name="alt"/>
+        <label for="images-edit-alt">Beschreibung <small>empfohlen für Barrierefreiheit</small></label>
+        <input type="text" id="images-edit-title" name="title"/>
+        <label for="images-edit-title">Titel</label>
+        <div id="images-edit-upload" hidden>
+            <input type="file" id="images-edit-file" name="file" accept="image/*"/>
+            <label for="images-edit-file">Bild-Datei</label>
+        </div>
+        <div id="images-edit-output" hidden></div>
+        <div class="sx-actions sx-button">
+            <button type="submit"><span class="sx-button-icon">🖫</span> speichern</button>
+            <button type="button" data-remove hidden><span class="sx-button-icon">🗑</span> löschen</button>
+        </div>
+    </form>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../../js/app.js';
+
+    let data = state.get('image-load') || {}, edit = state.get('image-edit');
+
+    page.register('images-edit', ({render, action, listen}) => {
+        render(() => {
+            helper.set('#images-edit [data-type]', 'innerHTML', edit ? 'bearbeiten' : 'hinzufügen');
+            // If a new image should be created, no loaded backend data will be used.
+            helper.set('#images-edit-name', 'value', edit ? data.name : '');
+            helper.set('#images-edit-src', 'value', edit ? data.src : '');
+            helper.set('#images-edit-alt', 'value', edit ? data.alt : '');
+            helper.set('#images-edit-title', 'value', edit ? data.title : '');
+            helper.set('#images-edit [data-remove]', 'hidden', !edit);
+            helper.set('#images-edit-upload', 'hidden', edit);
+            helper.set('#images-edit-output', 'hidden', !edit);
+            if (edit && data['base64']) {
+                helper.set('#images-edit-output', 'innerHTML', `<img src="data:image/jpeg;base64,${data['base64']}" alt="Vorschaubild"/>`);
+            }
+        });
+
+        action('#images-edit', 'submit', (event, target) => {
+            event.preventDefault();
+            const formData = new FormData(target);
+            if (edit) {
+                // Need to tell the backend which image to update.
+                formData.append('id', data.id);
+            }
+            state.dispatch('image-save', formData);
+        });
+        action('#images-edit [data-remove]', 'click', () => {
+            if (confirm('Soll das Bild wirklich gelöscht werden?')) {
+                state.dispatch('image-remove', data.id);
+            }
+        });
+
+        listen('image-load', (image) => data = image || {});
+        listen('image-edit', (trigger) => edit = trigger);
+        // Return to the previous page after save or remove - can be image-list or page.
+        listen('image-save', () => history.back());
+        listen('image-remove', () => history.back());
+    });
+</script>
+
+<style>
+    #images-edit img {
+        max-width: 100%;
+    }
+</style>

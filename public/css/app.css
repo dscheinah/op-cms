@@ -4,6 +4,7 @@
 @import "../vendor/dscheinah/sx-css/src/menu.css";
 /* Only the modules required for the example are imported. Add more if needed. */
 @import "../vendor/dscheinah/sx-css/src/table.css";
+@import "../vendor/dscheinah/sx-css/src/tabs.css";
 
 @import "../node_modules/@toast-ui/editor/dist/toastui-editor.css";
 

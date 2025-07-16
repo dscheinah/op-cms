@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "111f66c9b4f9822113763aa40f541107",
+    "content-hash": "8fda1c9960d268ee542e5b5fe11c927b",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -83,26 +83,27 @@
         },
         {
             "name": "dscheinah/sx-application",
-            "version": "1.0.1",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dscheinah/sx-application.git",
-                "reference": "1fc317b2fe99cb1518f4336b21ba59b96e89acc4"
+                "reference": "90a6d7dea52570ec0da591134d4fb962c94fdd89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dscheinah/sx-application/zipball/1fc317b2fe99cb1518f4336b21ba59b96e89acc4",
-                "reference": "1fc317b2fe99cb1518f4336b21ba59b96e89acc4",
+                "url": "https://api.github.com/repos/dscheinah/sx-application/zipball/90a6d7dea52570ec0da591134d4fb962c94fdd89",
+                "reference": "90a6d7dea52570ec0da591134d4fb962c94fdd89",
                 "shasum": ""
             },
             "require": {
                 "dscheinah/sx-container": "^1.0",
                 "dscheinah/sx-log": "^1.0",
-                "dscheinah/sx-message": "^1.0",
+                "dscheinah/sx-message": "^1.2",
                 "dscheinah/sx-server": "^1.0",
-                "php": "^7.3|^8.0"
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^9.3"
             },
             "type": "library",
@@ -118,9 +119,9 @@
             "description": "Collection of reusable components for applications using the sx framework.",
             "support": {
                 "issues": "https://github.com/dscheinah/sx-application/issues",
-                "source": "https://github.com/dscheinah/sx-application/tree/1.0.1"
+                "source": "https://github.com/dscheinah/sx-application/tree/v1.1.1"
             },
-            "time": "2023-04-27T20:24:39+00:00"
+            "time": "2025-07-09T20:18:31+00:00"
         },
         {
             "name": "dscheinah/sx-config",
@@ -264,6 +265,45 @@
             "time": "2025-01-20T19:57:31+00:00"
         },
         {
+            "name": "dscheinah/sx-image",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dscheinah/sx-image.git",
+                "reference": "fcaf0bdf2ba39dec80c2a156d0bc30caba520606"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dscheinah/sx-image/zipball/fcaf0bdf2ba39dec80c2a156d0bc30caba520606",
+                "reference": "fcaf0bdf2ba39dec80c2a156d0bc30caba520606",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sx\\Image\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "A simple wrapper to the gd library to render jpeg images.",
+            "support": {
+                "issues": "https://github.com/dscheinah/sx-image/issues",
+                "source": "https://github.com/dscheinah/sx-image/tree/v1.1.1"
+            },
+            "time": "2025-07-13T21:12:17+00:00"
+        },
+        {
             "name": "dscheinah/sx-js",
             "version": "v1.1.0",
             "source": {
@@ -329,25 +369,27 @@
         },
         {
             "name": "dscheinah/sx-message",
-            "version": "1.1.0",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dscheinah/sx-message.git",
-                "reference": "20cb63f78a5b94d1fb4c637936ad69f64724e388"
+                "reference": "1199834000a5ea0bf5b8be7983ae2d0b45e0dff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dscheinah/sx-message/zipball/20cb63f78a5b94d1fb4c637936ad69f64724e388",
-                "reference": "20cb63f78a5b94d1fb4c637936ad69f64724e388",
+                "url": "https://api.github.com/repos/dscheinah/sx-message/zipball/1199834000a5ea0bf5b8be7983ae2d0b45e0dff1",
+                "reference": "1199834000a5ea0bf5b8be7983ae2d0b45e0dff1",
                 "shasum": ""
             },
             "require": {
                 "dscheinah/sx-container": "^1.0",
-                "php": "^7.3|^8.0",
+                "ext-json": "*",
+                "php": "^7.4|^8.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^2.0"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^9.3"
             },
             "type": "library",
@@ -363,9 +405,9 @@
             "description": "A PSR-7 and PSR-17 message implementation with response generators.",
             "support": {
                 "issues": "https://github.com/dscheinah/sx-message/issues",
-                "source": "https://github.com/dscheinah/sx-message/tree/1.1.0"
+                "source": "https://github.com/dscheinah/sx-message/tree/v1.2.3"
             },
-            "time": "2023-04-27T20:18:09+00:00"
+            "time": "2025-07-13T20:28:46+00:00"
         },
         {
             "name": "dscheinah/sx-server",
@@ -449,6 +491,47 @@
             "time": "2025-03-16T18:37:35+00:00"
         },
         {
+            "name": "dscheinah/sx-template-image",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dscheinah/sx-template-image.git",
+                "reference": "85eac0f2fc8b9610b1998d9dcba47f1a013f28c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dscheinah/sx-template-image/zipball/85eac0f2fc8b9610b1998d9dcba47f1a013f28c2",
+                "reference": "85eac0f2fc8b9610b1998d9dcba47f1a013f28c2",
+                "shasum": ""
+            },
+            "require": {
+                "dscheinah/sx-container": "^1.0",
+                "dscheinah/sx-image": "^1.1",
+                "dscheinah/sx-template": "^1.1",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sx\\Template\\Image\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Extends sx-template with support for images.",
+            "support": {
+                "issues": "https://github.com/dscheinah/sx-template-image/issues",
+                "source": "https://github.com/dscheinah/sx-template-image/tree/v1.0.1"
+            },
+            "time": "2025-07-04T18:07:28+00:00"
+        },
+        {
             "name": "dscheinah/sx-template-markdown",
             "version": "v1.0.0",
             "source": {
@@ -491,16 +574,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.6.1",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "d990688c91cedfb69753ffc2512727ec646df2ad"
+                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d990688c91cedfb69753ffc2512727ec646df2ad",
-                "reference": "d990688c91cedfb69753ffc2512727ec646df2ad",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
+                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
                 "shasum": ""
             },
             "require": {
@@ -537,7 +620,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.7-dev"
+                    "dev-main": "2.8-dev"
                 }
             },
             "autoload": {
@@ -594,7 +677,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-29T14:10:59+00:00"
+            "time": "2025-05-05T12:20:28+00:00"
         },
         {
             "name": "league/config",

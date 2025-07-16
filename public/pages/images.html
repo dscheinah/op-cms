@@ -1,0 +1,122 @@
+<template>
+    <div id="images" class="sx-button">
+        <h1>Bilder</h1>
+        <details>
+            <summary>Bearbeite bestehende Bilder, lösche veraltete oder füge neue hinzu.</summary>
+            <p>
+                Wenn du bestehende Bilder bearbeitest, werden die Änderungen sofort sichtbar.
+                Möchtest du neue Änderungen vorbereiten und gesammelt anwenden, lege neue Bilder an.
+                Veraltete Bilder kannst du anschließend löschen.
+            </p>
+            <p>
+                Die Tabs repräsentieren Bilder-Sammlungen mit Reihenfolge. Diese kannst du separat bearbeiten.
+            </p>
+        </details>
+        <form id="images-galleries" class="sx-tabs"></form>
+        <table class="sx-list">
+            <colgroup>
+                <col/>
+                <col/>
+                <col class="sx-action"/>
+            </colgroup>
+            <tbody></tbody>
+        </table>
+        <div class="sx-actions">
+            <button type="button" data-add>
+                <span class="sx-button-icon">＋</span> Bild
+            </button>
+            <button type="button" data-add-gallery>
+                <span class="sx-button-icon">＋</span> Sammlung
+            </button>
+            <button type="button" data-edit-gallery disabled>
+                <span class="sx-button-icon">✏️</span> bearbeiten
+            </button>
+        </div>
+    </div>
+</template>
+
+<script type="module">
+    import {helper, page, state} from '../js/app.js';
+
+    let data = state.get('image-list') || [];
+    let selected = state.get('image-gallery') || '';
+    let galleries = state.get('gallery-list') || [];
+
+    page.register('images', ({render, show, action, listen}) => {
+        render(() => {
+            helper.list('#images tbody', data, (item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><img src="data:image/jpeg;base64,${item['base64']}" alt="Vorschaubild"/></td>
+                    <td>${item.name}</td>
+                    <td><button type="button" value="${item.id}" data-edit><span class="sx-button-icon">▽</span> mehr</button></td>
+                `;
+                return row;
+            });
+            helper.list('#images-galleries', [{id: '', name: 'Alle'}, ...galleries], (item) => {
+                const checked = selected === item.id;
+
+                const element = helper.create('div');
+                element.innerHTML = `
+                    <label class="sx-tab ${checked ? 'sx-selected' : ''}">
+                    <input type="radio" name="gallery" value="${item.id}" ${checked ? 'checked' : ''}>
+                        ${item.name}
+                    </label>
+                `;
+                return element;
+            });
+            helper.set('#images [data-edit-gallery', 'value', selected);
+            helper.set('#images [data-edit-gallery', 'disabled', !selected);
+        });
+
+        show(() => {
+            state.dispatch('image-list', selected);
+            state.dispatch('gallery-list', null);
+        });
+
+        action('#images-galleries input', 'change', (event, target) => {
+            state.dispatch('image-gallery', parseInt(target.value));
+        })
+
+        action('#images [data-add]', 'click', () => {
+            // To tell the edit page to render in "create" mode with empty form elements.
+            state.dispatch('image-edit', false);
+            page.show('images-edit');
+        });
+        action('#images [data-edit]', 'click', (event, target) => {
+            // To tell the edit page to render in "update" mode and use the loaded values.
+            state.dispatch('image-edit', true);
+            state.dispatch('image-load', parseInt(target.value));
+            page.show('images-edit');
+        });
+
+        action('#images [data-add-gallery]', 'click', () => {
+            // To tell the edit page to render in "create" mode with empty form elements.
+            state.dispatch('gallery-edit', false);
+            page.show('images-gallery');
+        });
+        action('#images [data-edit-gallery]', 'click', (event, target) => {
+            // To tell the edit page to render in "update" mode and use the loaded values.
+            state.dispatch('gallery-edit', true);
+            state.dispatch('gallery-load', parseInt(target.value));
+            page.show('images-gallery');
+        });
+
+        listen('image-gallery', (gallery) => {
+            selected = gallery || '';
+            state.dispatch('image-list', selected);
+        })
+        listen('image-list', (images) => data = images || []);
+        listen('gallery-list', (data) => galleries = data || []);
+    });
+</script>
+
+<style>
+    #images col:first-child {
+        width: 40px;
+    }
+
+    #images img {
+        display: block;
+    }
+</style>

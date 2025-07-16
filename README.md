@@ -25,6 +25,8 @@ Each plugin also has its own configuration page to provide the real content.
 To create a custom template, start with a copy of the example code to e.g. `.website`. Also point the CMS to your template,
 by providing a `config/template.local.php` override containing `return ['template' => __DIR__ . '/../.website/template.phtml'];`.
 
+You also need to make sure that both your apps do have (write) access to the configured image folders. You may need to change these with an override and use volumes in production.
+
 If you intend to create a separate project for the website, 
 you need to adapt the `TemplateEmitterProvider` and `Template/*ValueProvider` with its dependencies.
 You also need a way to provide shared read access to your template and database.

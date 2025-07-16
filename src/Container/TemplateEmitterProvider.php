@@ -4,6 +4,10 @@ namespace App\Container;
 
 use Sx\Container\Injector;
 use Sx\Container\ProviderInterface;
+use Sx\Template\Image\Template\GalleryEmitter;
+use Sx\Template\Image\Template\GalleryInterface;
+use Sx\Template\Image\Template\ImageEmitter;
+use Sx\Template\Image\Template\ImageInterface;
 use Sx\Template\Markdown\Text\TextMarkdownEmitter;
 use Sx\Template\Template\Calendar\CalendarEmitter;
 use Sx\Template\Template\Calendar\CalendarInterface;
@@ -28,6 +32,8 @@ class TemplateEmitterProvider implements ProviderInterface
     public function provide(Injector $injector): void
     {
         Template::set(CalendarInterface::class, $injector->get(CalendarEmitter::class));
+        Template::set(GalleryInterface::class, $injector->get(GalleryEmitter::class));
+        Template::set(ImageInterface::class, $injector->get(ImageEmitter::class));
         Template::set(SectionInterface::class, $injector->get(SectionEmitter::class));
         Template::set(TextInterface::class, $injector->get(TextMarkdownEmitter::class));
         Template::set(TitleInterface::class, $injector->get(TitleEmitter::class));

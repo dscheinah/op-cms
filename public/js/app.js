@@ -5,18 +5,20 @@ import navigate from './app/navigate.js';
 import * as init from './app/init.js';
 import * as PageRepository from './repository/page.js';
 import * as TextRepository from './repository/text.js';
+import * as ImageRepository from './repository/image.js';
+import * as GalleryRepository from './repository/gallery.js';
 import * as CalendarRepository from './repository/calendar.js';
-// By separating the helpers to its own namespace they do not need to packed to an object here.
+// By separating the helpers to its own namespace they do not need to be packed to an object here.
 import * as helper from './helper.js';
 import * as plugins from './plugins.js';
 
-// Only allow one app to be run. This may happen, if browser cache loads an outdated page for some reason.
+// Only allow one app to be run. This may happen if browser cache loads an outdated page for some reason.
 if (window.sxAppInitialized) {
     throw new Error('Tried to access a cached app. Please reload the page.');
 }
 window.sxAppInitialized = true;
 
-// Create the global event listener (on window) to be used for e.g. navigation.
+// Create the global event listener (on the window) to be used for e.g., navigation.
 const action = new Action(window);
 // The repository that will handle the requests to the backend.
 // Create the global state manager.
@@ -51,6 +53,14 @@ init.repositories(state, {
     'text-load': TextRepository.load,
     'text-save': TextRepository.save,
     'text-remove': TextRepository.remove,
+    'image-list': ImageRepository.list,
+    'image-load': ImageRepository.load,
+    'image-save': ImageRepository.save,
+    'image-remove': ImageRepository.remove,
+    'gallery-list': GalleryRepository.list,
+    'gallery-load': GalleryRepository.load,
+    'gallery-save': GalleryRepository.save,
+    'gallery-remove': GalleryRepository.remove,
     'calendar-load': CalendarRepository.load,
     'calendar-save': CalendarRepository.save,
     'calendar-remove': CalendarRepository.remove,
@@ -66,11 +76,14 @@ init.state(state);
 page.add('page', 'pages/page.html', window.location.href);
 page.add('texts', 'pages/texts.html', window.location.href);
 page.add('texts-edit', 'pages/texts/edit.html', window.location.href);
+page.add('images', 'pages/images.html', window.location.href);
+page.add('images-edit', 'pages/images/edit.html', window.location.href);
+page.add('images-gallery', 'pages/images/gallery.html', window.location.href);
 page.add('calendar', 'pages/calendar.html', window.location.href);
 page.add('calendar-edit', 'pages/calendar/edit.html', window.location.href);
 // Add more plugin configuration pages here if needed.
 
-// If used with routing this must be replaced with a check on the called route.
+// If used with routing, this must be replaced with a check on the called route.
 page.show('page');
 
 // The app.js file is used as a kind of service manager for dependency injection.

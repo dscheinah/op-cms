@@ -10,6 +10,11 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 
 RUN docker-php-ext-install mysqli
 
+RUN apt-get update && apt-get install -y libfreetype-dev libjpeg62-turbo-dev libpng-dev \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j$(nproc) gd \
+ && apt-get purge -y libfreetype-dev libjpeg62-turbo-dev libpng-dev
+
 # Add the complete PHP sources.
 ADD ./src /var/www/html/src
 

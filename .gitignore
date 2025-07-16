@@ -13,3 +13,5 @@ docker-compose.override.yml
 !.*.dist
 !.htaccess
 /public/node_modules
+/data/*/*
+/example/public/bilder/*
