@@ -52,7 +52,7 @@
                     <input type="hidden" name="images[]" value="${image.id}"/>
                     <div class="sx-control">
                         <div class="sx-button-icon images-gallery-move"><span>↕</span></div>
-                        <div>${image.name}</div>
+                        <div><img src="data:image/jpeg;base64,${image['base64']}" alt="Vorschaubild"/>${image.name}</div>
                         <button type="button" value="${image.id}" data-unassign>
                             <span class="sx-button-icon">−</span> entfernen
                         </button>
@@ -149,6 +149,11 @@
 </script>
 
 <style>
+    #images-gallery img {
+      vertical-align: middle;
+      margin: 0 .6em;
+    }
+
     #images-gallery-assigned {
         list-style: none;
         padding: 0;
