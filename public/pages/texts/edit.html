@@ -27,7 +27,7 @@
     const editor = new ToastUiEditor({
       el: helper.element('#texts-edit-editor'),
       height: 'auto',
-      initialEditType: 'wysiwyg',
+      hideModeSwitch: true,
       previewStyle: 'vertical',
       usageStatistics: false,
       language: 'de-DE',
@@ -36,7 +36,15 @@
         ['hr', 'quote'],
         ['ul', 'ol', 'indent', 'outdent'],
         ['table', 'link'],
-      ]
+      ],
+      customHTMLRenderer: {
+        softbreak(_, { options }) {
+          return {
+            type: 'html',
+            content: options.softbreak
+          };
+        }
+      },
     });
     editor.on('change', () => {
       helper.set('#texts-edit-content', 'value', editor.getMarkdown());
